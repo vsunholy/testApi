@@ -24,7 +24,7 @@ const pool = new Pool({
 
 
 
-
+//middleware
 app.use(express.json());
 
 
@@ -81,8 +81,7 @@ app.get('/users', async (req, res) => {
 
 
 
-
-
+//end game things
 
 pool.on('error', (err, client) => {
     console.error('Error:', err);
