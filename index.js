@@ -1,17 +1,28 @@
-console.log('test');
-
-
 
 const express = require('express');
 const app = express();
-
-
-
+require('dotenv').config();
+const { Pool } = require('pg');
 
 
 
 
 // prisijungimas prie duomenu bazes later
+
+const pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT
+});
+
+
+
+
+
+
+
 
 
 app.use(express.json());
@@ -51,9 +62,12 @@ app.get('/products', async (req, res) => {
 
 
 
-
-
-
+pool.on('error', (err, client) => {
+    console.error('Error:', err);
+}); 
+pool.on('connect', () => {
+    console.log('Connected to the database');
+});
 
 
 const PORT = 3000;
