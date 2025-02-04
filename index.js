@@ -72,7 +72,7 @@ app.post('/users/create', async (req, res) => {
     try {
         const { username, password } = req.body;
         const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *', [username, password]);
-        res.status(200).json(result.rows);
+        res.status(201).json(result.rows);
     }
     catch (error) {
         res.status(400).json({ error: 'error' });
