@@ -1,23 +1,12 @@
 
 const express = require('express');
 const app = express();
-require('dotenv').config();
-const { Pool } = require('pg');
+const pool = require('./database'); // is database.js failo importuojam pool kintamaji
 
 
 
 
 // prisijungimas prie duomenu bazes later
-
-const pool = new Pool({
-    user: process.env.PG_USER,
-    host: process.env.PG_HOST,
-    database: process.env.PG_DATABASE,
-    password: process.env.PG_PASSWORD,
-    port: process.env.PG_PORT,
-});
-
-
 
 
 
@@ -83,12 +72,6 @@ app.get('/users', async (req, res) => {
 
 //end game things
 
-pool.on('error', (err, client) => {
-    console.error('Error:', err);
-});
-pool.on('connect', () => {
-    console.log('Connected to the database');
-});
 
 
 const PORT = 3000;
