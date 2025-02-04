@@ -27,10 +27,7 @@ app.use(express.json());
 app.get('/', async (req, res) => {
     try {
         const result = await pool.query('SELECT NOW()');
-        res.json({
-            status: 'success',
-            data: result.rows,
-        });
+        res.status(200).json(result.rows);
     } catch (err) {
         console.error('Error executing query', err.stack);
         res.status(500).json({ error: 'Database error' });
@@ -50,20 +47,13 @@ app.get('/products', async (req, res) => {
 app.get('/users', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM users');
-        res.json({
-            status: 'success',
-            data: result.rows,
-        });
+        res.status(200).json(result.rows);
+
     } catch (err) {
         console.error('Error executing query', err.stack);
         res.status(500).json({ error: 'Database error' });
     }
 });
-
-
-
-
-
 
 
 
