@@ -24,6 +24,8 @@ app.use(express.json());
 // /products/update/:id PUT/PATCH
 // /products/delete/:id DELETE
 
+
+// USER ROUTES
 app.get('/', async (req, res) => {
     try {
         const result = await pool.query('SELECT NOW()');
@@ -31,15 +33,6 @@ app.get('/', async (req, res) => {
     } catch (err) {
         console.error('Error executing query', err.stack);
         res.status(500).json({ error: 'Database error' });
-    }
-});
-
-app.get('/products', async (req, res) => {
-    try {
-        res.status(200).json({ message: 'Sekmingai pasiekiamas produktu puslapis' });
-    }
-    catch (error) {
-        res.status(400).json({ error: 'error' });
     }
 });
 
@@ -102,7 +95,65 @@ app.delete('/users/delete/:id', async (req, res) => {
     }
 });
 
+// PRODUCT ROUTES
+app.get('/products', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM products');
+        res.status(200).json(result.rows);
 
+    } catch (err) {
+        console.error('Error executing query', err.stack);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+app.get('/products/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM products WHERE id = $1', [id]);
+        res.status(200).json(result.rows);
+    }
+    catch (error) {
+        res.status(400).json({ error: 'error' });
+    }
+});
+
+app.post('/products/create', async (req, res) => {
+
+    try {
+        const { title, price, description } = req.body;
+        const result = await pool.query('INSERT INTO products (title, price, description) VALUES ($1, $2, $3) RETURNING *', [title, price, description]);
+        res.status(201).json(result.rows);
+    }
+    catch (error) {
+        res.status(400).json({ error: 'error' });
+    }
+}
+);
+
+app.put('/products/update/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, price, description } = req.body;
+        const result = await pool.query('UPDATE products SET title = $1, price = $2, description = $3 WHERE id = $4 RETURNING *', [title, price, description, id]);
+        res.status(200).json(result.rows);
+    }
+    catch (error) {
+        res.status(400).json({ error: 'error' });
+    }
+});
+
+app.delete('/products/delete/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query('DELETE FROM products WHERE id = $1 RETURNING *', [id]);
+        res.status(200).json(result.rows);
+    }
+    catch (error) {
+        res.status(400).json({ error: 'error' });
+    }
+}
+);
 //end game things
 
 
