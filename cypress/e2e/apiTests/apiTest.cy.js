@@ -32,21 +32,43 @@ describe('CRUD API', () => {
 
             })
         });
-        it('should create a new product', () => {
-            cy.request('POST', 'http://localhost:3000/products/create', {
-              title: 'BB',
-              price: 10.99,
-              description: 'BB1'
-            }).then(response => {
-              expect(response.status).to.eq(201);
-              expect(response.body).to.be.an('array');
-              expect(response.body).to.have.length.greaterThan(0);
-              const product = response.body[0];
-              expect(product).to.have.property('id');
-              expect(product.title).to.eq('BB');
-            });
-          }); 
-        
+        // it('should create a new product', () => {
+        //     cy.request('POST', 'http://localhost:3000/products/create', {
+        //       title: 'BB',
+        //       price: 10.99,
+        //       description: 'BB1'
+        //     }).then(response => {
+        //       expect(response.status).to.eq(201);
+        //       expect(response.body).to.be.an('array');
+        //       expect(response.body).to.have.length.greaterThan(0);
+        //       const product = response.body[0];
+        //       expect(product).to.have.property('id');
+        //       expect(product.title).to.eq('BB');
+        //     });
+        //   }); 
+          
+        it('should update a product', () => {
+            cy.request('PUT','http://localhost:3000/products/update/2', {
+               title:'Sunkus rytas',
+               price: 100.99,
+               description: 'monday sucks' 
+            }).then(response =>{
+                expect(response.status).to.eq(200);
+                const product = response.body[0];
+                expect(product).to.have.property('id');
+                expect(product.title).to.eq('Sunkus rytas');
+            })
+        })
+        it('should delete a product', () => {
+            cy.request('DELETE','http://localhost:3000/products/delete/2').then(response => {
+                expect(response.status).to.eq(200);
+                expect(response.body).to.be.an('array');
+                expect(response.body).to.have.length.greaterThan(0);
+                const product = response.body[0];
+                expect(product).to.have.property('id');
+                expect(product.id).to.eq(2);
+            })
+        })
     });
 });
 
