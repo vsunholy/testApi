@@ -88,7 +88,7 @@ app.delete('/users/delete/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const result = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);
-        res.status(200).json(result.rows);
+        res.status(200).json({ user: result.rows, message: 'User deleted' });
     }
     catch (error) {
         res.status(400).json({ error: 'error' });
@@ -147,13 +147,14 @@ app.delete('/products/delete/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const result = await pool.query('DELETE FROM products WHERE id = $1 RETURNING *', [id]);
-        res.status(200).json(result.rows);
+        res.status(200).json({ product: result.rows, message: 'Product deleted' });
     }
     catch (error) {
         res.status(400).json({ error: 'error' });
     }
-}
-);
+});
+
+
 //end game things
 
 
